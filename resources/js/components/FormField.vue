@@ -7,7 +7,6 @@
     <template slot="field">
       <quill-editor
         :style="css"
-        v-model="value"
         ref="myQuillEditor"
         :options="editorOption"
         @blur="onEditorBlur($event)"
@@ -125,7 +124,8 @@ export default {
      * Fill the given FormData object with the field's internal value.
      */
     fill(formData) {
-      formData.append(this.field.attribute, this.value || "");
+      console.log({ formData })
+      formData.append(this.field.attribute, JSON.stringify(this.$refs.myQuillEditor.quill.getContents() || {}));
       if (!formData.has('persisted')) {
         formData.append('persisted', JSON.stringify(this.persisted));
       }
@@ -173,6 +173,7 @@ export default {
   },
   mounted() {
     this.autotip()
+    this.$refs.myQuillEditor.quill.setContents(JSON.parse(this.value));
   },
 };
 </script>
